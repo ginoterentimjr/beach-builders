@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Atlantis 2: As Profundezas</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%9A%3C/text%3E%3C/svg%3E">
+<style>
+  :root { --sea:#1E6E9E; --sea2:#134B6E; --ink:#3A2A1A; --ok:#2f9e44; --bad:#e03131; --bg:#FFF8EC; --orange:#E07E1E; --card:#FFFFFF; --muted:#7A6A57; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Comic Sans MS", "Comic Neue", "Chalkboard SE", system-ui, sans-serif; }
+  body { background: linear-gradient(#CDEBF7 0, #FFF8EC 320px); min-height: 100vh; }
+  header { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: var(--sea); color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+  header .title { font-weight: 700; font-size: 17px; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+  header .shells { font-weight: 700; font-size: 16px; background: rgba(255,255,255,.18); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+  main { max-width: 1020px; margin: 0 auto; padding: 14px 14px 40px; }
+  h1 { font-size: 30px; margin: 6px 0 4px; color: var(--sea); text-align: center; }
+  h2 { font-size: 24px; margin: 4px 0 8px; color: var(--sea2); }
+  h3 { color: var(--sea2); }
+  .sub { text-align: center; color: var(--muted); margin: 0 0 14px; font-size: 16px; }
+  .card { background: var(--card); border-radius: 18px; padding: 14px 16px; box-shadow: 0 3px 12px rgba(0,0,0,.08); margin: 12px 0; font-size: 17px; }
+  .remember { background: #FFF3D6; border: 3px solid #F2C94C; }
+  .remember b { color: var(--orange); }
+  .act { display: flex; gap: 12px; align-items: center; background: #E6F4EA; border: 3px solid #5BA84F; }
+  .act .tag { font-weight: 900; color: #3F7A36; white-space: nowrap; }
+  .guide { width: 74px; flex: none; }
+  .hint { margin: 0 0 10px; font-size: 16px; text-align: center; color: var(--muted); }
+  button { font-family: inherit; font-size: 17px; font-weight: 700; border: 0; border-radius: 14px; padding: 12px 18px; cursor: pointer; min-height: 48px; touch-action: manipulation; }
+  .btn { background: var(--sea); color: #fff; box-shadow: 0 3px 0 var(--sea2); }
+  .btn.orange { background: var(--orange); box-shadow: 0 3px 0 #a85a10; }
+  .btn.ghost { background: #fff; color: var(--sea); border: 3px solid var(--sea); box-shadow: none; }
+  .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 14px 0 4px; }
+  .feedback { display: none; text-align: center; border-radius: 16px; padding: 12px 14px; font-size: 18px; font-weight: 700; margin-top: 10px; }
+  .feedback.show { display: block; }
+  .feedback.good { background: #E6F4EA; border: 3px solid var(--ok); }
+  .feedback.try { background: #FFF3D6; border: 3px solid var(--orange); }
+  .feedback small { display: block; font-weight: 400; font-size: 15px; margin-top: 4px; }
+  .why { text-align: left; font-weight: 400; font-size: 15px; margin-top: 8px; background: #fff; border-radius: 12px; padding: 10px 12px; }
+  .chip { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: #fff; border: 3px solid #C9B79A; border-radius: 14px; padding: 10px 14px; font-size: 17px; font-weight: 700; min-height: 52px; cursor: pointer; user-select: none; text-align: center; }
+  .chip img { height: 34px; }
+  .chip.sel { border-color: var(--orange); background: #FFF3D6; transform: scale(1.04); }
+  .chip.ok { border-color: var(--ok); background: #E6F4EA; }
+  .chip.bad { border-color: var(--bad); background: #FDE4DE; }
+  .chip.reveal { outline: 4px dashed var(--ok); outline-offset: 2px; }
+  .pool { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; min-height: 60px; padding: 8px; }
+  .bins { display: grid; grid-template-columns: repeat(var(--nb, 2), 1fr); gap: 12px; }
+  .bin { border-radius: 18px; padding: 10px; min-height: 150px; border: 4px dashed; }
+  .bin h3 { margin: 0 0 8px; text-align: center; font-size: 19px; cursor: pointer; }
+  .bin .pool { min-height: 80px; }
+  .bin.target { box-shadow: 0 0 0 4px #F2C94C; }
+  .match { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; }
+  .match .col { display: flex; flex-direction: column; gap: 10px; }
+  .match .chip { justify-content: flex-start; text-align: left; position: relative; padding-left: 46px; }
+  .match .num { position: absolute; left: 10px; width: 28px; height: 28px; border-radius: 50%; color: #fff; font-size: 15px; display: none; align-items: center; justify-content: center; }
+  .match .paired .num { display: flex; }
+  .pics { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .pic { background: #fff; border-radius: 16px; padding: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.07); text-align: center; }
+  .pic img { height: 90px; max-width: 100%; object-fit: contain; }
+  .pic .q { font-size: 16px; margin: 4px 0 8px; }
+  .pic .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .pic .chip { font-size: 15px; padding: 6px 6px; min-height: 44px; border-radius: 12px; }
+  .tf { display: flex; align-items: center; gap: 10px; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 17px; flex-wrap: wrap; }
+  .tf:last-child { border-bottom: 0; }
+  .tf .two { display: flex; gap: 8px; flex: none; flex-wrap: wrap; }
+  .tf .chip { min-width: 84px; }
+  .gap { display: inline-flex; min-width: 120px; min-height: 46px; border: 3px dashed var(--sea); border-radius: 12px; align-items: center; justify-content: center; padding: 4px 10px; margin: 0 4px; cursor: pointer; background: #fff; vertical-align: middle; font-weight: 700; color: var(--sea2); }
+  .gap.ok { border: 3px solid var(--ok); background: #E6F4EA; } .gap.bad { border: 3px solid var(--bad); background: #FDE4DE; }
+  .gap.sel { border-color: var(--orange); background: #FFF3D6; }
+  .sentence { font-size: 19px; line-height: 2.2; margin: 6px 0; }
+  .mem { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .mcard { aspect-ratio: 4 / 3; border-radius: 16px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 6px; cursor: pointer; font-weight: 700; font-size: 16px; user-select: none; background: var(--sea); color: #fff; box-shadow: 0 3px 0 var(--sea2); }
+  .mcard.up { background: #fff; color: var(--ink); border: 3px solid var(--sea); box-shadow: none; }
+  .mcard.done { background: #E6F4EA; color: #2f6a26; border: 3px solid var(--ok); box-shadow: none; }
+  .mcard .back { font-size: 30px; }
+  .build { min-height: 60px; border: 3px dashed #C9B79A; border-radius: 14px; padding: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; background: #FFFDF7; }
+  .build.ok { border: 3px solid var(--ok); background: #E6F4EA; } .build.bad { border: 3px solid var(--bad); background: #FDE4DE; }
+  .tiles { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 14px; }
+  .tile { background: #fff; border: 3px solid var(--sea); color: var(--sea2); border-radius: 12px; padding: 8px 12px; font-size: 17px; font-weight: 700; cursor: pointer; min-height: 46px; display: inline-flex; align-items: center; gap: 6px; }
+  .tile img { height: 30px; }
+  .tile.used { visibility: hidden; }
+  .map { display: grid; grid-template-columns: repeat(var(--nm, 3), 1fr); gap: 12px; }
+  .stop { background: #fff; border-radius: 18px; padding: 12px 10px; text-align: center; box-shadow: 0 3px 12px rgba(0,0,0,.08); cursor: pointer; border: 3px solid transparent; }
+  .stop img { height: 70px; }
+  .stop .n { font-size: 14px; color: var(--muted); }
+  .stop .nm { font-weight: 700; font-size: 17px; }
+  .stop .st { font-size: 14px; margin-top: 4px; }
+  .stop.done { border-color: var(--ok); background: #F3FBF4; }
+  .team { display: flex; justify-content: center; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+  .team img { height: 90px; }
+  .name { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; font-weight: 700; }
+  .name input { font-family: inherit; font-size: 18px; padding: 10px 12px; border-radius: 12px; border: 3px solid var(--sea); width: 220px; color: var(--sea2); font-weight: 700; }
+  .cert { text-align: center; border: 6px solid #F2A93B; background: #FFFCF4; }
+  /* frações e moedas (Math) */
+  .shade { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; }
+  .shade .it { background: #fff; border-radius: 16px; padding: 10px 12px; box-shadow: 0 2px 8px rgba(0,0,0,.07); text-align: center; }
+  .shade .q { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .bar { display: flex; height: 54px; border: 3px solid #3A2A1A; border-radius: 6px; overflow: hidden; width: 300px; max-width: 80vw; margin: 0 auto; }
+  .bar div { flex: 1; border-right: 2px solid #3A2A1A; background: #fff; cursor: pointer; }
+  .bar div:last-child { border-right: 0; }
+  .bar div.on { background: var(--fill, #F2A93B); }
+  .setg { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; max-width: 320px; margin: 0 auto; }
+  .setg span { width: 44px; height: 44px; border-radius: 50%; border: 3px solid #3A2A1A; background: #fff; cursor: pointer; }
+  .setg span.on { background: var(--fill, #F2A93B); }
+  .it.ok { outline: 4px solid var(--ok); } .it.bad { outline: 4px solid var(--bad); }
+  .coins { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 8px 0; }
+  .coin { width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 15px; cursor: pointer; border: 4px solid #8a6400; background: #F2C94C; color: #5a3a00; box-shadow: 0 3px 0 #8a6400; user-select: none; text-align: center; line-height: 1.05; }
+  .coin.silver { background: #D5DCE2; border-color: #6A7480; color: #2B3A4A; box-shadow: 0 3px 0 #6A7480; }
+  .coin.copper { background: #D9915A; border-color: #7a3a1a; color: #3a1a0a; box-shadow: 0 3px 0 #7a3a1a; }
+  .coin.bi { background: radial-gradient(#F2C94C 0 52%, #D5DCE2 53%); border-color: #6A7480; }
+  .coin.note { width: 110px; height: 60px; border-radius: 10px; background: #BFE3A8; border-color: #3F7A36; color: #1F4A1A; box-shadow: 0 3px 0 #3F7A36; }
+  .tray { min-height: 86px; border: 3px dashed #C9B79A; border-radius: 16px; padding: 8px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; background: #FFFDF7; }
+  .tray .coin { width: 56px; height: 56px; font-size: 13px; }
+  .tray .coin.note { width: 90px; height: 50px; }
+  .tray.ok { border: 3px solid var(--ok); background: #E6F4EA; } .tray.bad { border: 3px solid var(--bad); background: #FDE4DE; }
+  .total { text-align: center; font-weight: 700; font-size: 18px; margin: 6px 0; }
+  .hp { height: 22px; border: 3px solid #3A2A1A; border-radius: 12px; overflow: hidden; display: flex; max-width: 380px; margin: 6px auto; background: #fff; }
+  .hp div { flex: 1; border-right: 1px solid #3A2A1A; }
+  .hp div:last-child { border-right: 0; }
+  .hp div.on { background: #EE6C4D; }
+  footer { text-align: center; font-size: 12px; color: var(--muted); padding: 6px 12px 24px; }
+  footer a { color: var(--muted); }
+  @media (max-width: 640px) { .map { grid-template-columns: repeat(2, 1fr); } .bins { grid-template-columns: 1fr 1fr; } .match { grid-template-columns: 1fr; } .mem { grid-template-columns: repeat(3, 1fr); } h1 { font-size: 24px; } .guide { width: 56px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="title" id="home">🐚 Atlantis 2: As Profundezas</div>
+  <div class="shells" id="shells"></div>
+</header>
+<main id="app"></main>
+<footer><span id="foot"></span> · <a href="#" id="reset"></a></footer>
+<script>
+const CFG = {"T": {"h1": "Atlantis 2: As Profundezas", "sub": "Geografia · Year 3 · Água e Lixo · jogos novos, perguntas novas!", "nameLabel": "Nome da exploradora:", "namePh": "seu nome", "story": "Sky, Tintim e Nina descobriram as <b>profundezas de Atlantis</b>! Em cada sala há um <b>jogo diferente</b>. Vença o jogo para abrir a sala e ganhar <b>10 pérolas</b>. Toque numa sala para começar.", "roundWord": "Sala", "start": "▶ Começar a exploração", "cont": "▶ Continuar a exploração", "seeCert": "🏆 Ver meu certificado", "certH": "PARABÉNS, {name}!", "certP": "Você explorou as 8 salas das profundezas e ganhou as 80 pérolas!", "certList": "Você treinou: usos da água e a água no planeta, estados e ciclo da água, o caminho da água e a ETA, água potável e croqui, poluição e proteção da água, consumo consciente, as lixeiras e o destino do lixo.", "ready": "★ Pronta para a prova de 12 de novembro! ★", "backMap": "◀ Voltar ao mapa", "remember": "Lembre:", "mapBtn": "◀ Mapa", "check": "✔ Conferir respostas", "nextBtn": "Próxima sala ▶", "ok": "🎉 {s} / {t}! {stop} aberta: +{per} pérolas!<small>Conte ao papai a ideia mais importante desta sala.</small>", "try1": "⭐ {s} / {t}. Boa tentativa! Releia o quadro \"Lembre\", troque as vermelhas e confira de novo.<small>{stop} já está aberta: +{per} pérolas!</small>", "reveal": "⭐ {s} / {t}. Veja as caixas com tracejado verde: são as respostas certas. Leia em voz alta!", "whyWord": "Por quê:", "sortHint": "Toque numa carta e depois na caixa certa. Toque numa carta dentro da caixa para tirá-la.", "matchHint": "Toque num item da esquerda e depois no par da direita. Toque de novo para desfazer.", "tfTitle": "Rodada relâmpago:", "quickTitle": "Agora responda:", "gapHint": "Toque numa palavra e depois numa lacuna.", "tapHere": "toque aqui", "memHint": "Encontre os pares. Vire 2 cartas de cada vez.", "pairs": "Pares: {f} / {n} · jogadas: {m}", "buildHint": "Toque nas peças na ordem certa. Toque numa peça da caixa para tirá-la.", "sentWord": "Sequência {n}", "tapPieces": "toque nas peças abaixo", "shadeHint": "", "shadeCount": "", "shadeReveal": "", "coinHint": "", "trayEmpty": "", "trayTotal": "", "trayReveal": "", "footer": "As respostas ficam salvas neste aparelho e chegam ao papai", "reset": "recomeçar", "confirm": "Recomeçar e apagar as respostas deste aparelho?"}, "ROUNDS": [{"id": 1, "stop": "Jardim de Corais", "pic": "planeta", "guide": "sky", "title": "Para que serve a água?", "remember": "Usamos a água para <b>beber, cozinhar, tomar banho, lavar e regar</b>. Ela é <b>habitat</b> de seres vivos, serve para o <b>lazer</b> e <b>gera energia</b> nas hidrelétricas. No planeta, <b>97,5% é salgada</b> e só <b>2,5% é doce</b>; quase toda a água doce está nas <b>geleiras e neves</b>.", "action": ["MEXA-SE!", "Antes de cada resposta, imite o uso da água: beber, nadar, regar uma planta ou girar como a turbina da hidrelétrica."], "type": "pics", "pics": [["hidreletrica", "A água desta usina serve para:", ["gerar energia elétrica", "lavar louça"], "gerar energia elétrica"], ["peixe", "Para o peixe, a água é:", ["o habitat dele", "um tipo de lazer"], "o habitat dele"], ["geleira", "A maior parte da água doce está:", ["nas geleiras e neves", "nos rios e lagos"], "nas geleiras e neves"], ["planeta", "A maior parte da água do planeta é:", ["salgada", "doce"], "salgada"]], "tf": [["Só 2,5% da água do planeta é doce.", ["verdadeiro", "falso"], "verdadeiro"], ["Os rios e lagos guardam a maior parte da água doce.", ["verdadeiro", "falso"], "falso"], ["As águas subterrâneas ficam embaixo da terra.", ["verdadeiro", "falso"], "verdadeiro"], ["Sem água, não seria possível viver.", ["verdadeiro", "falso"], "verdadeiro"]], "why": "Água salgada: 97,5%. Água doce: 2,5%. Da água doce, 68,9% está nas geleiras e neves, 29,9% é subterrânea e os rios e lagos têm só 0,3%. Por isso precisamos cuidar dela."}, {"id": 2, "stop": "Caverna do Vapor", "pic": "gelo", "guide": "nina", "title": "Sólido, líquido ou gasoso?", "remember": "<b>Sólido</b>: gelo e neve. <b>Líquido</b>: água do copo e do rio. <b>Gasoso</b>: vapor, como o da panela e o do umidificador.", "action": ["MEXA-SE!", "Para cada carta, faça o estado com o corpo: SÓLIDO = fique dura como gelo; LÍQUIDO = balance como água; GASOSO = suba na ponta dos pés como vapor."], "type": "sort", "cols": 3, "bins": [["S", "🧊 SÓLIDO", "#E6F6FB", "#2E86B0"], ["L", "💧 LÍQUIDO", "#E3F4FC", "#1D5F86"], ["G", "♨️ GASOSO", "#F3F4F6", "#8A96A0"]], "items": [["granizo", "S"], ["geleira", "S"], ["boneco de neve", "S"], ["chuva", "L"], ["lago", "L"], ["água da torneira", "L"], ["vapor do banho quente", "G"], ["vapor da chaleira", "G"], ["umidificador", "G"]], "why": "Granizo, geleira e neve são água congelada (sólido). Chuva, lago e torneira são água líquida. O vapor do banho, da chaleira e do umidificador é água no estado gasoso."}, {"id": 3, "stop": "Aqueduto Real", "pic": "eta", "guide": "tintim", "title": "Ponha em ordem!", "remember": "<b>Ciclo:</b> evaporação, condensação, precipitação, infiltração. <b>Caminho da água na cidade:</b> captação, ETA, reservatório, casas, esgoto, ETE. <b>Na ETA:</b> floculação, decantação, filtração e desinfecção (cloro e flúor).", "action": ["MEXA-SE!", "Coloque as cartas do caminho da água no chão e pule de uma para a outra na ordem, antes de montar cada sequência aqui."], "type": "build", "numbered": true, "joiner": " → ", "labels": ["O ciclo da água", "O caminho da água na cidade", "As etapas dentro da ETA"], "sentences": [["evaporação", "condensação (nuvens)", "precipitação (chuva)", "infiltração (solo e aquíferos)"], ["captação no rio", "ETA", "reservatório", "casas", "esgoto", "ETE"], ["floculação", "decantação", "filtração", "desinfecção (cloro e flúor)"]], "why": "O Sol evapora a água, o vapor esfria e forma nuvens, chove e a água infiltra no solo. Na cidade, a água é captada, tratada na ETA, guardada no reservatório, usada nas casas, vira esgoto e é tratada na ETE. Na ETA, a sujeira forma flocos, desce (decantação), fica presa no filtro e a água recebe cloro e flúor."}, {"id": 4, "stop": "Biblioteca Submersa", "pic": "copo", "guide": "sky", "title": "Memória da água potável", "remember": "<b>Potável</b>: pode ser bebida. <b>Tratada</b>: teve a contaminação eliminada. <b>Mineral</b>: tem mais sais minerais. <b>Croqui</b>: desenho de um lugar visto de cima, com <b>símbolos</b> e <b>legenda</b>.", "action": ["CONVERSE!", "A cada par encontrado, explique a palavra ao papai com um exemplo da sua casa."], "type": "memory", "mem": [["potável", "pode ser bebida"], ["mineral", "tem mais sais minerais"], ["croqui", "lugar visto de cima"], ["legenda", "explica os símbolos"], ["ETE", "trata o esgoto"], ["aquífero", "água embaixo da terra"]], "quick": [["Toda água engarrafada é mineral?", ["sim", "não"], "não"], ["Sem estação de tratamento, a água deve ser:", ["fervida ou filtrada", "bebida direto do rio"], "fervida ou filtrada"], ["A água \"de mesa\" é:", ["só potável", "mineral"], "só potável"]], "why": "Água potável é a que pode ser consumida. Nem toda água engarrafada é mineral: a de mesa é apenas potável. Onde não há tratamento, ferver ou filtrar. Croqui é um desenho simples visto de cima; a legenda explica os símbolos."}, {"id": 5, "stop": "Lagoa Turva", "pic": "cano_esgoto", "guide": "tintim", "title": "Polui ou protege?", "remember": "<b>Poluem a água:</b> esgoto sem tratamento, indústrias, produtos químicos da agricultura, mineração (mercúrio), lixo, petróleo e desmatamento. <b>Protegem:</b> tratar o esgoto, reduzir o plástico, reciclar, economizar e reaproveitar a água.", "action": ["MEXA-SE!", "POLUI = cubra o nariz como se cheirasse mal; PROTEGE = abrace a si mesma. Faça o gesto antes de cada carta."], "type": "sort", "bins": [["P", "🛢️ POLUI A ÁGUA", "#FDE4DE", "#EE6C4D"], ["S", "💚 PROTEGE A ÁGUA", "#E6F4EA", "#5BA84F"]], "items": [["esgoto sem tratamento", "P"], ["derramamento de petróleo", "P"], ["produtos químicos das plantações", "P"], ["lixo jogado no rio", "P"], ["mineração com mercúrio", "P"], ["desmatamento das nascentes", "P"], ["tratar o esgoto", "S"], ["reduzir o uso de plástico", "S"], ["reaproveitar a água da máquina de lavar", "S"], ["fechar a torneira ao escovar os dentes", "S"]], "why": "A água poluída faz mal aos animais, às plantas e às pessoas (diarreia, cólera, hepatite A). Tratar o esgoto, usar menos plástico, reciclar e economizar água são soluções."}, {"id": 6, "stop": "Bazar das Ostras", "pic": "carrinho", "guide": "nina", "title": "Consumidora consciente", "remember": "Categorias: <b>alimentação</b>, <b>vestuário e objetos</b>, <b>serviços</b> (médico, dentista, ensino, energia, transporte) e <b>lazer</b>. <b>Consumo consciente</b>: comprar só o que precisa, consertar, doar, preferir produtos locais, evitar desperdício e reciclar.", "action": ["MEXA-SE!", "Corra até o canto da categoria (como na Feira de Atlantis) antes de tocar a resposta."], "type": "pics", "pics": [["prato", "Almoço:", ["alimentação", "lazer"], "alimentação"], ["camiseta", "Comprar uma camiseta:", ["serviços", "vestuário e objetos"], "vestuário e objetos"], ["dentista", "Ir ao dentista:", ["serviços", "alimentação"], "serviços"], ["lampada", "A energia elétrica da casa:", ["vestuário e objetos", "serviços"], "serviços"], ["ingresso", "Ir ao cinema:", ["lazer", "serviços"], "lazer"], ["celular", "Comprar um celular:", ["vestuário e objetos", "lazer"], "vestuário e objetos"]], "tf": [["Fazer uma lista de compras ajuda a não comprar o que não precisa.", ["verdadeiro", "falso"], "verdadeiro"], ["Trocar de celular todo ano é consumo consciente.", ["verdadeiro", "falso"], "falso"], ["Comprar de produtores locais é um princípio do consumo responsável.", ["verdadeiro", "falso"], "verdadeiro"], ["Levar sacola de pano ao mercado ajuda a reduzir o lixo.", ["verdadeiro", "falso"], "verdadeiro"]], "why": "Energia, ensino, transporte, médico e dentista são serviços. Celular e roupa entram em vestuário e objetos. Consumo consciente é comprar só o necessário e cuidar do planeta."}, {"id": 7, "stop": "Fábrica de Bolhas", "pic": "lixeira_verde", "guide": "sky", "title": "Cada lixo na sua lixeira", "remember": "<b>Amarela</b>: metal. <b>Azul</b>: papel. <b>Vermelha</b>: plástico. <b>Verde</b>: vidro. <b>Marrom</b>: orgânico. <b>Cinza</b>: não recicláveis (papel higiênico e guardanapo usados, papel toalha, fita adesiva, isopor, espelho, cerâmica, esponja de aço).", "action": ["MEXA-SE!", "Diga a cor da lixeira em voz alta e corra até a folha colorida dessa cor antes de tocar."], "type": "sort", "cols": 3, "bins": [["am", "🟡 metal", "#FFF6D6", "#C99A1E"], ["az", "🔵 papel", "#E3F0FB", "#2E86B0"], ["ve", "🔴 plástico", "#FDE4DE", "#D9443A"], ["vd", "🟢 vidro", "#E6F4EA", "#3F9A4A"], ["mr", "🟤 orgânico", "#F3E7D5", "#8A5A30"], ["ci", "⚪ não recicláveis", "#EEF0F2", "#8A96A0"]], "items": [["lata de atum", "am"], ["folha de caderno", "az"], ["caixa de papelão", "az"], ["pote de iogurte", "ve"], ["garrafa de suco de vidro", "vd"], ["casca de ovo", "mr"], ["resto de comida", "mr"], ["papel higiênico usado", "ci"], ["esponja de aço", "ci"], ["isopor", "ci"]], "why": "Cada material tem sua cor: metal amarela, papel azul, plástico vermelha, vidro verde, orgânico marrom. Isopor, esponja de aço e papel higiênico usado não são recicláveis: lixeira cinza."}, {"id": 8, "stop": "Abismo dos Resíduos", "pic": "aterro", "guide": "tintim", "title": "Complete as frases", "remember": "<b>Aterro sanitário</b>: solo impermeável, camadas de manta e pedra. <b>Lixão</b>: contamina solo, água e ar e atrai ratos e insetos. <b>Chorume</b>: líquido escuro do lixo. Plástico: 450 anos. Vidro: 1 milhão de anos. Pilhas: descarte correto.", "action": ["ENSINE!", "Quando todas as frases estiverem prontas, leia cada uma para o papai como uma professora."], "type": "gaps", "gaps": [["No aterro sanitário, o solo é", "impermeável", "."], ["O líquido escuro e de cheiro ruim do lixo é o", "chorume", "."], ["O lixão atrai", "ratos", "e insetos que transmitem doenças."], ["O plástico demora", "450 anos", "para se decompor."], ["O vidro demora", "1 milhão de anos", "para se decompor."], ["Pilhas e celulares velhos vão para o descarte", "correto", ", longe do lixo comum."], ["Quanto mais consumimos, mais", "lixo", "produzimos."], ["A compostagem transforma restos orgânicos em", "adubo", "."]], "bank": ["impermeável", "chorume", "ratos", "450 anos", "1 milhão de anos", "correto", "lixo", "adubo", "2 a 6 semanas", "peixes"], "why": "O aterro sanitário controla o lixo; o lixão contamina e atrai animais que transmitem doenças. Papel some em 2 a 6 semanas, orgânico em 1 a 6 meses, metal em 50 a 200 anos, plástico em 450 anos e vidro em 1 milhão de anos."}], "KEY": "atlantis-geo-v2", "V1KEY": "atlantis-geo-v1", "PER": 10, "CUR": "🦪", "PREFIX": "Geografia V2", "MAPCOLS": 4, "TEAM": [["sky", 90], ["tintim", 94], ["nina", 66], ["atlantis", 90]], "CERTTEAM": [["sky", 90], ["tintim", 94], ["nina", 66], ["perola", 70]]};
+const T = CFG.T, ROUNDS = CFG.ROUNDS;
+const FORM = "https://docs.google.com/forms/d/e/1FAIpQLSf8Q0eXHBOoqDjMB4RNrlT2vCchtRgfrl3rMNP-N9qK_XbWBw/formResponse";
+const ENTRY = { nome: "entry.569173553", desafio: "entry.2095890421", acertos: "entry.240185722", respostas: "entry.597932716" };
+const KEY = CFG.KEY;
+const img = (n) => `img/${n}.png`;
+const fmt = (s, o) => s.replace(/\{(\w+)\}/g, (_, k) => (o[k] !== undefined ? o[k] : ""));
+
+let st = { screen: "home", name: "", res: {}, a: {} };
+try { const s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s) st = Object.assign(st, s); } catch (e) {}
+if (!st.name && CFG.V1KEY) { try { const v1 = JSON.parse(localStorage.getItem(CFG.V1KEY) || "null"); if (v1 && v1.text) { const n = Object.values(v1.text)[0]; if (n) st.name = String(n).trim(); } } catch (e) {} }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} };
+let queue = []; try { queue = JSON.parse(localStorage.getItem(KEY + "-q") || "[]"); } catch (e) {}
+const saveQ = () => { try { localStorage.setItem(KEY + "-q", JSON.stringify(queue)); } catch (e) {} };
+
+const app = document.getElementById("app");
+const el = (h) => { const t = document.createElement("template"); t.innerHTML = h.trim(); return t.content.firstChild; };
+const shuffle = (arr, seed) => { const a = arr.slice(); let s = seed; for (let i = a.length - 1; i > 0; i--) { s = (s * 9301 + 49297) % 233280; const j = Math.floor((s / 233280) * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const A = (r) => (st.a[r.id] = st.a[r.id] || {});
+const MAXC = ROUNDS.length * CFG.PER;
+function updShells() { document.getElementById("shells").textContent = `${CFG.CUR} ${Object.keys(st.res).length * CFG.PER} / ${MAXC}`; }
+
+function go(screen) { st.screen = screen; save(); render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+function render() {
+  updShells(); app.innerHTML = "";
+  if (st.screen === "home") return home();
+  if (st.screen === "cert") return cert();
+  const r = ROUNDS.find((x) => "r" + x.id === st.screen); if (r) return round(r);
+  go("home");
+}
+function home() {
+  app.appendChild(el(`<div><h1>${T.h1}</h1><p class="sub">${T.sub}</p></div>`));
+  app.appendChild(el(`<div class="team">${CFG.TEAM.map(([n, h]) => `<img src="${img(n)}" alt="" style="height:${h}px">`).join("")}</div>`));
+  const nm = el(`<div class="card name">${T.nameLabel} <input id="nm" maxlength="24" autocomplete="off" placeholder="${T.namePh}"></div>`);
+  app.appendChild(nm);
+  const inp = nm.querySelector("input"); inp.value = st.name || ""; inp.oninput = () => { st.name = inp.value; save(); };
+  app.appendChild(el(`<div class="card remember">${T.story}</div>`));
+  const map = el(`<div class="map" style="--nm:${CFG.MAPCOLS || 3}"></div>`);
+  ROUNDS.forEach((r) => {
+    const res = st.res[r.id];
+    const c = el(`<div class="stop ${res ? "done" : ""}"><img src="${img(r.pic)}" alt=""><div class="n">${T.roundWord} ${r.id}</div><div class="nm">${r.stop}</div><div class="st">${res ? `✔ ${res.score}/${res.total}` : r.title}</div></div>`);
+    c.onclick = () => go("r" + r.id); map.appendChild(c);
+  });
+  app.appendChild(map);
+  const next = ROUNDS.find((r) => !st.res[r.id]);
+  const acts = el(`<div class="actions"></div>`);
+  const b = el(`<button class="btn orange">${next ? (Object.keys(st.res).length ? T.cont : T.start) : T.seeCert}</button>`);
+  b.onclick = () => go(next ? "r" + next.id : "cert"); acts.appendChild(b); app.appendChild(acts);
+}
+function cert() {
+  const n = (st.name || "Isabel").trim();
+  app.appendChild(el(`<div class="card cert"><h1>${fmt(T.certH, { name: n.toUpperCase() })}</h1><p style="font-size:19px;font-weight:700;color:#3F7A36">${T.certP}</p>
+    <div class="team">${CFG.CERTTEAM.map(([x, h]) => `<img src="${img(x)}" alt="" style="height:${h}px">`).join("")}</div><p style="font-size:17px">${T.certList}</p><p style="font-size:18px;font-weight:700;color:var(--sea)">${T.ready}</p></div>`));
+  const acts = el(`<div class="actions"></div>`); const b = el(`<button class="btn ghost">${T.backMap}</button>`); b.onclick = () => go("home"); acts.appendChild(b); app.appendChild(acts);
+}
+function round(r) {
+  app.appendChild(el(`<div><h2>${T.roundWord} ${r.id}: ${r.stop} · ${r.title}</h2></div>`));
+  app.appendChild(el(`<div class="card remember"><b>${T.remember}</b> ${r.remember}</div>`));
+  app.appendChild(el(`<div class="card act"><img class="guide" src="${img(r.guide)}" alt=""><div><span class="tag">${r.action[0]}</span> ${r.action[1]}</div></div>`));
+  const box = el(`<div class="card"></div>`); app.appendChild(box);
+  const api = BUILD[r.type](r, box);
+  const fb = el(`<div class="feedback"></div>`);
+  const acts = el(`<div class="actions"></div>`);
+  const back = el(`<button class="btn ghost">${T.mapBtn}</button>`); back.onclick = () => go("home");
+  const chk = el(`<button class="btn orange">${T.check}</button>`);
+  const nxt = el(`<button class="btn">${T.nextBtn}</button>`);
+  nxt.onclick = () => { const n = ROUNDS.find((x) => x.id > r.id && !st.res[x.id]) || ROUNDS.find((x) => !st.res[x.id]); go(n ? "r" + n.id : "cert"); };
+  nxt.style.display = st.res[r.id] ? "" : "none";
+  chk.onclick = () => {
+    const a = A(r); a.tries = (a.tries || 0) + 1;
+    const out = api.check(a.tries >= 2);
+    st.res[r.id] = { score: out.score, total: out.total, tries: a.tries }; save(); updShells();
+    const perfect = out.score === out.total, o = { s: out.score, t: out.total, stop: r.stop, per: CFG.PER };
+    fb.className = "feedback show " + (perfect ? "good" : "try");
+    fb.innerHTML = perfect ? fmt(T.ok, o) : (a.tries >= 2 ? fmt(T.reveal, o) + `<div class="why"><b>${T.whyWord}</b> ${r.why}</div>` : fmt(T.try1, o));
+    nxt.style.display = ""; fb.scrollIntoView({ behavior: "smooth", block: "center" });
+    send({ nome: (st.name || "Isabel").trim() || "Isabel", desafio: `${CFG.PREFIX} · ${T.roundWord} ${r.id} · ${r.title}`, acertos: `${out.score}/${out.total} (tentativa ${a.tries})`, respostas: out.lines.join(" | ") });
+  };
+  acts.append(back, chk, nxt); app.append(fb, acts);
+}
+
+/* ===================== TIPOS DE JOGO ===================== */
+const BUILD = {
+  // separar em caixas: r.bins = [[chave, rótulo, cor de fundo, cor da borda]], r.items = [[texto, chave, imagem?]]
+  sort(r, box) {
+    const a = A(r); a.place = a.place || {};
+    const order = shuffle(r.items.map((_, i) => i), 7); let sel = null;
+    box.innerHTML = `<p class="hint">${T.sortHint}</p><div class="pool" id="pool"></div><div class="bins" style="--nb:${r.cols || r.bins.length}">${r.bins.map(([k, lab, bg, bd]) => `<div class="bin" data-b="${k}" style="background:${bg};border-color:${bd}"><h3>${lab}</h3><div class="pool"></div></div>`).join("")}</div>`;
+    const pool = box.querySelector("#pool"), bins = [...box.querySelectorAll(".bin")];
+    const lab = (k) => (r.bins.find((b) => b[0] === k) || [0, "?"])[1].replace(/<[^>]+>/g, "").trim();
+    const chips = order.map((i) => { const it = r.items[i]; const c = el(`<div class="chip">${it[2] ? `<img src="${img(it[2])}" alt="">` : ""}${it[0]}</div>`); c.dataset.i = i; return c; });
+    const clear = () => chips.forEach((c) => c.classList.remove("ok", "bad", "reveal"));
+    function lay() { chips.forEach((c) => { const p = a.place[c.dataset.i]; (p ? box.querySelector(`.bin[data-b="${p}"] .pool`) : pool).appendChild(c); c.classList.toggle("sel", sel === c); }); bins.forEach((b) => b.classList.toggle("target", !!sel)); }
+    chips.forEach((c) => (c.onclick = (e) => { e.stopPropagation(); clear(); const here = a.place[c.dataset.i];
+      if (sel && sel !== c && here) { a.place[sel.dataset.i] = here; sel = null; save(); }
+      else if (here) { delete a.place[c.dataset.i]; sel = null; save(); }
+      else sel = sel === c ? null : c; lay(); }));
+    bins.forEach((b) => (b.onclick = () => { if (!sel) return; clear(); a.place[sel.dataset.i] = b.dataset.b; sel = null; save(); lay(); }));
+    lay();
+    return { check(reveal) {
+      let score = 0; const lines = [];
+      chips.forEach((c) => { const i = +c.dataset.i, p = a.place[i], ok = p === r.items[i][1]; if (ok) score++;
+        c.classList.remove("ok", "bad", "reveal"); c.classList.add(ok ? "ok" : "bad");
+        lines.push(`${r.items[i][0]}: ${p ? lab(p) : "(sem resposta)"} ${ok ? "✔" : "✘"}`);
+        if (reveal && !ok) { c.classList.add("reveal"); c.innerHTML = `${r.items[i][0]} → ${lab(r.items[i][1])}`; } });
+      return { score, total: r.items.length, lines };
+    } };
+  },
+  // ligar pares
+  match(r, box) {
+    const a = A(r); a.pair = a.pair || {};
+    const COLORS = ["#5BA84F", "#2A9D8F", "#C98A2E", "#6B4423", "#C8602A", "#2E86B0", "#EE6C4D", "#7B5AA6"];
+    const right = shuffle(r.pairs.map((_, i) => i), 11);
+    box.innerHTML = `<p class="hint">${T.matchHint}</p><div class="match"><div class="col" id="L"></div><div class="col" id="R"></div></div>`;
+    let selL = null;
+    const L = r.pairs.map((p, i) => { const c = el(`<div class="chip"><span class="num"></span>${p[0]}</div>`); c.dataset.i = i; box.querySelector("#L").appendChild(c); return c; });
+    const R = right.map((j) => { const c = el(`<div class="chip"><span class="num"></span>${r.pairs[j][1]}</div>`); c.dataset.j = j; box.querySelector("#R").appendChild(c); return c; });
+    function paint() {
+      const used = Object.values(a.pair).map(String); let k = 0;
+      L.forEach((c) => { const j = a.pair[c.dataset.i]; c.classList.toggle("sel", selL === c); c.classList.toggle("paired", j !== undefined);
+        if (j !== undefined) { const col = COLORS[k % 8]; k++; c.querySelector(".num").style.background = col; c.querySelector(".num").textContent = k;
+          const rc = R.find((x) => x.dataset.j == j); rc.classList.add("paired"); rc.querySelector(".num").style.background = col; rc.querySelector(".num").textContent = k; } });
+      R.forEach((c) => { if (!used.includes(c.dataset.j)) c.classList.remove("paired"); });
+    }
+    const clear = () => [...L, ...R].forEach((c) => c.classList.remove("ok", "bad", "reveal"));
+    L.forEach((c) => (c.onclick = () => { clear(); if (a.pair[c.dataset.i] !== undefined) { delete a.pair[c.dataset.i]; selL = null; save(); } else selL = selL === c ? null : c; paint(); }));
+    R.forEach((c) => (c.onclick = () => { clear(); const j = c.dataset.j; const owner = Object.keys(a.pair).find((k) => a.pair[k] == j);
+      if (owner !== undefined && !selL) { delete a.pair[owner]; save(); paint(); return; }
+      if (!selL) return; if (owner !== undefined) delete a.pair[owner]; a.pair[selL.dataset.i] = +j; selL = null; save(); paint(); }));
+    paint();
+    return { check(reveal) {
+      let score = 0; const lines = [];
+      L.forEach((c) => { const i = +c.dataset.i, j = a.pair[i], ok = j === i; if (ok) score++;
+        c.classList.remove("ok", "bad", "reveal"); c.classList.add(ok ? "ok" : "bad");
+        const rc = R.find((x) => x.dataset.j == j); if (rc) { rc.classList.remove("ok", "bad"); rc.classList.add(ok ? "ok" : "bad"); }
+        if (reveal && !ok) { c.classList.add("reveal"); c.innerHTML = `<span class="num"></span>${r.pairs[i][0]} → <i>${r.pairs[i][1]}</i>`; }
+        lines.push(`${r.pairs[i][0]}: ${j !== undefined ? r.pairs[j][1] : "(sem resposta)"} ${ok ? "✔" : "✘"}`); });
+      return { score, total: r.pairs.length, lines };
+    } };
+  },
+  // cartões com imagem e opções + rodada rápida: r.pics = [[imagem, pergunta, [opções], certa]], r.tf = [[frase, [opções], certa]]
+  pics(r, box) {
+    const a = A(r); a.pic = a.pic || {}; a.tf = a.tf || {};
+    box.innerHTML = `${r.pics && r.pics.length ? `<div class="pics"></div>` : ""}${r.tf && r.tf.length ? `<h3 style="margin:16px 0 6px">${r.tfTitle || T.tfTitle}</h3><div id="tf"></div>` : ""}`;
+    const grid = box.querySelector(".pics"), tfb = box.querySelector("#tf"); const groups = [];
+    (r.pics || []).forEach((p, i) => {
+      const c = el(`<div class="pic">${p[0] ? `<img src="${img(p[0])}" alt="">` : ""}<div class="q">${i + 1}. ${p[1]}</div><div class="opts"></div></div>`);
+      const opts = p[2].map((s) => { const b = el(`<div class="chip">${s}</div>`); b.onclick = () => { a.pic[i] = s; save(); paint(); }; c.querySelector(".opts").appendChild(b); return b; });
+      grid.appendChild(c); groups.push({ store: a.pic, i, opts, labels: p[2], right: p[3], q: p[1] });
+    });
+    (r.tf || []).forEach((t, i) => {
+      const row = el(`<div class="tf"><span>${(r.pics || []).length + i + 1}. ${t[0]}</span><span class="two"></span></div>`);
+      const opts = t[1].map((s) => { const b = el(`<div class="chip">${s}</div>`); b.onclick = () => { a.tf[i] = s; save(); paint(); }; row.querySelector(".two").appendChild(b); return b; });
+      tfb.appendChild(row); groups.push({ store: a.tf, i, opts, labels: t[1], right: t[2], q: t[0] });
+    });
+    function paint() { groups.forEach((g) => g.opts.forEach((b, o) => { b.classList.remove("ok", "bad", "reveal"); b.classList.toggle("sel", g.store[g.i] === g.labels[o]); })); }
+    paint();
+    return { check(reveal) {
+      let score = 0; const lines = [];
+      groups.forEach((g) => { const v = g.store[g.i], ok = v === g.right; if (ok) score++;
+        g.opts.forEach((b, o) => { const val = g.labels[o]; b.classList.remove("ok", "bad", "reveal", "sel"); if (val === v) b.classList.add(ok ? "ok" : "bad"); if (reveal && !ok && val === g.right) b.classList.add("reveal"); });
+        lines.push(`${g.q.replace(/<[^>]+>/g, "")} ${v === undefined ? "(sem resposta)" : v} ${ok ? "✔" : "✘"}`); });
+      return { score, total: groups.length, lines };
+    } };
+  },
+  // completar lacunas: r.gaps = [[antes, certa, depois]], r.bank = [palavras]
+  gaps(r, box) {
+    const a = A(r); a.gap = a.gap || {};
+    box.innerHTML = `<p class="hint">${T.gapHint}</p><div class="tiles" id="bank"></div><div id="sent"></div>`;
+    let selW = null; const bank = box.querySelector("#bank"), sent = box.querySelector("#sent");
+    const tiles = shuffle(r.bank, 5).map((w) => { const t = el(`<div class="tile">${w}</div>`); t.dataset.w = w; t.onclick = () => { selW = selW === w ? null : w; paint(); }; bank.appendChild(t); return t; });
+    const gaps = r.gaps.map((g, i) => { const row = el(`<div class="sentence">${i + 1}. ${g[0]} <span class="gap"></span>${g[2]}</div>`); const gp = row.querySelector(".gap");
+      gp.onclick = () => { if (selW) { Object.keys(a.gap).forEach((k) => { if (a.gap[k] === selW) delete a.gap[k]; }); a.gap[i] = selW; selW = null; } else delete a.gap[i]; save(); paint(); };
+      sent.appendChild(row); return gp; });
+    function paint() {
+      const used = Object.values(a.gap);
+      tiles.forEach((t) => { t.classList.toggle("used", used.includes(t.dataset.w)); t.style.background = selW === t.dataset.w ? "#FFF3D6" : ""; t.style.borderColor = selW === t.dataset.w ? "#E07E1E" : ""; });
+      gaps.forEach((gp, i) => { gp.classList.remove("ok", "bad"); gp.textContent = a.gap[i] || T.tapHere; gp.style.color = a.gap[i] ? "" : "#9ab"; gp.classList.toggle("sel", !!selW && !a.gap[i]); });
+    }
+    paint();
+    return { check(reveal) {
+      let score = 0; const lines = [];
+      gaps.forEach((gp, i) => { const v = a.gap[i], ok = v === r.gaps[i][1]; if (ok) score++; gp.classList.remove("sel"); gp.classList.add(ok ? "ok" : "bad");
+        if (reveal && !ok) gp.textContent = `${v || "?"} → ${r.gaps[i][1]}`;
+        lines.push(`${i + 1}: ${v || "(sem resposta)"} ${ok ? "✔" : "✘"}`); });
+      return { score, total: r.gaps.length, lines };
+    } };
+  },
+  // jogo da memória + perguntas rápidas: r.mem = [[a, b]], r.quick = [[pergunta, [opções], certa]]
+  memory(r, box) {
+    const a = A(r); a.found = a.found || []; a.q = a.q || {}; a.moves = a.moves || 0;
+    const cards = shuffle(r.mem.flatMap((p, i) => [[i, p[0], true], [i, p[1], false]]), 3);
+    box.innerHTML = `<p class="hint">${T.memHint}</p><div class="mem"></div><p id="mv" style="text-align:center;font-weight:700;margin:10px 0 0"></p><h3 style="margin:16px 0 6px">${r.quickTitle || T.quickTitle}</h3><div id="qk"></div>`;
+    const grid = box.querySelector(".mem"); let up = [], lock = false;
+    const els = cards.map((c, k) => { const d = el(`<div class="mcard"><span class="back">${CFG.CUR}</span></div>`); d.onclick = () => flip(k); grid.appendChild(d); return d; });
+    function paint() {
+      els.forEach((d, k) => { const [i, t, isP] = cards[k]; const done = a.found.includes(i), isUp = up.includes(k);
+        d.className = "mcard" + (done ? " done" : isUp ? " up" : ""); d.innerHTML = done || isUp ? (isP ? `<span style="font-size:19px">${t.toUpperCase()}</span>` : t) : `<span class="back">${CFG.CUR}</span>`; });
+      box.querySelector("#mv").textContent = fmt(T.pairs, { f: a.found.length, n: r.mem.length, m: a.moves });
+    }
+    function flip(k) {
+      if (lock || up.includes(k) || a.found.includes(cards[k][0])) return;
+      up.push(k); paint();
+      if (up.length === 2) { a.moves++; const [x, y] = up;
+        if (cards[x][0] === cards[y][0]) { a.found.push(cards[x][0]); up = []; save(); setTimeout(paint, 250); }
+        else { lock = true; setTimeout(() => { up = []; lock = false; paint(); }, 1100); } save(); }
+    }
+    const qk = box.querySelector("#qk"); const groups = [];
+    r.quick.forEach((q, i) => { const row = el(`<div class="tf"><span>${i + 1}. ${q[0]}</span><span class="two"></span></div>`);
+      const opts = q[1].map((o) => { const b = el(`<div class="chip">${o}</div>`); b.onclick = () => { a.q[i] = o; save(); pq(); }; row.querySelector(".two").appendChild(b); return b; });
+      qk.appendChild(row); groups.push(opts); });
+    function pq() { r.quick.forEach((q, i) => groups[i].forEach((b, o) => { b.classList.remove("ok", "bad", "reveal"); b.classList.toggle("sel", a.q[i] === q[1][o]); })); }
+    paint(); pq();
+    return { check(reveal) {
+      let score = a.found.length; const lines = [`memória: ${a.found.length}/${r.mem.length} pares em ${a.moves} jogadas`];
+      if (a.found.length < r.mem.length) els.forEach((d, k) => { if (!a.found.includes(cards[k][0])) d.style.outline = "3px dashed #e03131"; });
+      r.quick.forEach((q, i) => { const v = a.q[i], ok = v === q[2]; if (ok) score++;
+        groups[i].forEach((b, o) => { b.classList.remove("ok", "bad", "reveal", "sel"); if (q[1][o] === v) b.classList.add(ok ? "ok" : "bad"); if (reveal && !ok && q[1][o] === q[2]) b.classList.add("reveal"); });
+        lines.push(`${q[0]} ${v || "(sem resposta)"} ${ok ? "✔" : "✘"}`); });
+      return { score, total: r.mem.length + r.quick.length, lines };
+    } };
+  },
+  // pôr em ordem: r.sentences = [[peça1, peça2, ...]] (cada lista na ordem certa), r.labels = títulos
+  build(r, box) {
+    const a = A(r); a.b = a.b || {};
+    box.innerHTML = `<p class="hint">${T.buildHint}</p><div id="ss"></div>`;
+    const ss = box.querySelector("#ss"); const parts = [];
+    r.sentences.forEach((sen, i) => {
+      a.b[i] = a.b[i] || [];
+      const wrap = el(`<div style="margin:0 0 16px"><div style="font-weight:700;margin-bottom:6px">${(r.labels && r.labels[i]) || fmt(T.sentWord, { n: i + 1 })}</div><div class="build"></div><div class="tiles"></div></div>`);
+      const bd = wrap.querySelector(".build"), tl = wrap.querySelector(".tiles");
+      const order = shuffle(sen.map((_, k) => k), 13 + i * 7);
+      const tiles = order.map((k) => { const t = el(`<div class="tile">${sen[k]}</div>`); t.onclick = () => { if (!a.b[i].includes(k)) { a.b[i].push(k); save(); paint(); } }; tl.appendChild(t); t.dataset.k = k; return t; });
+      function paint() {
+        bd.classList.remove("ok", "bad"); bd.innerHTML = a.b[i].length ? "" : `<span style="color:#9ab">${T.tapPieces}</span>`;
+        a.b[i].forEach((k, pos) => { const t = el(`<div class="tile" style="border-color:#E07E1E">${r.numbered ? pos + 1 + ". " : ""}${sen[k]}</div>`); t.onclick = () => { a.b[i].splice(pos, 1); save(); paint(); }; bd.appendChild(t); });
+        tiles.forEach((t) => t.classList.toggle("used", a.b[i].includes(+t.dataset.k)));
+      }
+      paint(); parts.push({ bd, sen, wrap }); ss.appendChild(wrap);
+    });
+    return { check(reveal) {
+      let score = 0; const lines = [];
+      parts.forEach((p, i) => { const ok = a.b[i].length === p.sen.length && a.b[i].every((k, pos) => k === pos); if (ok) score++;
+        p.bd.classList.add(ok ? "ok" : "bad");
+        const old = p.wrap.querySelector(".reveal-line"); if (old) old.remove();
+        if (reveal && !ok) p.wrap.appendChild(el(`<div class="reveal-line" style="margin-top:6px;color:#2f6a26;font-weight:700">✔ ${p.sen.join(r.joiner || " ")}</div>`));
+        lines.push(`${i + 1}: ${a.b[i].map((k) => p.sen[k]).join(" / ") || "(sem resposta)"} ${ok ? "✔" : "✘"}`); });
+      return { score, total: r.sentences.length, lines };
+    } };
+  },
+  // pintar frações: r.shade = [[pergunta, "bar"|"set", partes, certas, cor?]]
+  shade(r, box) {
+    const a = A(r); a.on = a.on || {};
+    box.innerHTML = `<p class="hint">${T.shadeHint}</p><div class="shade"></div>`;
+    const wrap = box.querySelector(".shade"); const items = [];
+    r.shade.forEach((q, i) => {
+      a.on[i] = a.on[i] || [];
+      const it = el(`<div class="it"><div class="q">${i + 1}. ${q[0]}</div><div class="${q[1] === "bar" ? "bar" : "setg"}" style="--fill:${q[4] || "#F2A93B"}"></div><div class="total" style="font-size:15px"></div></div>`);
+      const g = it.querySelector(".bar,.setg");
+      const parts = [...Array(q[2])].map((_, k) => { const p = el(q[1] === "bar" ? `<div></div>` : `<span></span>`); p.onclick = () => { const s = a.on[i]; const at = s.indexOf(k); if (at >= 0) s.splice(at, 1); else s.push(k); save(); paint(); }; g.appendChild(p); return p; });
+      wrap.appendChild(it); items.push({ it, parts, q, cnt: it.querySelector(".total") });
+    });
+    function paint() { items.forEach(({ it, parts, q, cnt }, i) => { it.classList.remove("ok", "bad"); parts.forEach((p, k) => p.classList.toggle("on", a.on[i].includes(k))); cnt.textContent = fmt(T.shadeCount, { n: a.on[i].length, d: q[2] }); }); }
+    paint();
+    return { check(reveal) {
+      let score = 0; const lines = [];
+      items.forEach(({ it, q, cnt }, i) => { const n = a.on[i].length, ok = n === q[3]; if (ok) score++; it.classList.add(ok ? "ok" : "bad");
+        if (reveal && !ok) cnt.textContent = fmt(T.shadeReveal, { r: q[3], d: q[2] });
+        lines.push(`${q[0].replace(/<[^>]+>/g, "")}: ${n}/${q[2]} ${ok ? "✔" : "✘"}`); });
+      return { score, total: items.length, lines };
+    } };
+  },
+  // moedas: r.coins = [[valor em centavos, rótulo, classe]], r.tasks = [[enunciado, alvo em centavos]]
+  coins(r, box) {
+    const a = A(r); a.t = a.t || {};
+    const money = (c) => "R$ " + (c / 100).toFixed(2).replace(".", ",");
+    box.innerHTML = `<p class="hint">${T.coinHint}</p><div id="tasks"></div>`;
+    const wrap = box.querySelector("#tasks"); const items = [];
+    r.tasks.forEach((tk, i) => {
+      a.t[i] = a.t[i] || [];
+      const it = el(`<div style="margin:0 0 18px"><div style="font-weight:700;font-size:18px;margin-bottom:6px">${i + 1}. ${tk[0]}</div><div class="coins"></div><div class="tray"></div><div class="total"></div></div>`);
+      const cs = it.querySelector(".coins"), tray = it.querySelector(".tray"), tot = it.querySelector(".total");
+      r.coins.forEach((c, k) => { const b = el(`<div class="coin ${c[2] || ""}">${c[1]}</div>`); b.onclick = () => { a.t[i].push(k); save(); paint(); }; cs.appendChild(b); });
+      wrap.appendChild(it); items.push({ tray, tot, tk });
+    });
+    function paint() {
+      items.forEach(({ tray, tot }, i) => { tray.classList.remove("ok", "bad"); tray.innerHTML = a.t[i].length ? "" : `<span style="color:#9ab">${T.trayEmpty}</span>`;
+        a.t[i].forEach((k, pos) => { const c = r.coins[k]; const b = el(`<div class="coin ${c[2] || ""}">${c[1]}</div>`); b.onclick = () => { a.t[i].splice(pos, 1); save(); paint(); }; tray.appendChild(b); });
+        tot.textContent = fmt(T.trayTotal, { v: money(a.t[i].reduce((s, k) => s + r.coins[k][0], 0)) }); });
+    }
+    paint();
+    return { check(reveal) {
+      let score = 0; const lines = [];
+      items.forEach(({ tray, tot, tk }, i) => { const v = a.t[i].reduce((s, k) => s + r.coins[k][0], 0), ok = v === tk[1]; if (ok) score++; tray.classList.add(ok ? "ok" : "bad");
+        if (reveal && !ok) tot.textContent = fmt(T.trayReveal, { v: money(v), r: money(tk[1]) });
+        lines.push(`${tk[0].replace(/<[^>]+>/g, "")} ${money(v)} ${ok ? "✔" : "✘"}`); });
+      return { score, total: items.length, lines };
+    } };
+  },
+};
+
+function send(rec) { queue.push(rec); saveQ(); flush(); }
+async function flush() {
+  while (queue.length) {
+    const rec = queue[0]; const body = new URLSearchParams();
+    Object.keys(ENTRY).forEach((k) => body.append(ENTRY[k], rec[k] || ""));
+    try { await fetch(FORM, { method: "POST", mode: "no-cors", body }); queue.shift(); saveQ(); } catch (e) { break; }
+  }
+}
+document.getElementById("foot").textContent = T.footer;
+document.getElementById("reset").textContent = T.reset;
+document.getElementById("home").onclick = () => go("home");
+document.getElementById("reset").onclick = (e) => { e.preventDefault(); if (confirm(T.confirm)) { st = { screen: "home", name: st.name, res: {}, a: {} }; save(); render(); } };
+window.addEventListener("online", flush);
+render(); flush();
+</script>
+</body>
+</html>
