@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="__LANG__">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>__TITLE__</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E__FAVICON__%3C/text%3E%3C/svg%3E">
+<style>
+  :root { --sea:__COLOR__; --sand:#F6E7C1; --ink:#3A2A1A; --ok:#2f9e44; --bad:#e03131; --bg:#FFF8EC; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Comic Sans MS", "Comic Neue", "Chalkboard SE", system-ui, sans-serif; }
+  header { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--sea); color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+  header .title { font-weight: 700; font-size: 17px; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  header .shells { font-weight: 700; font-size: 16px; background: rgba(255,255,255,.18); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+  .nav { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 10px 12px; flex-wrap: wrap; }
+  button { font-family: inherit; font-size: 17px; font-weight: 700; border: 0; border-radius: 14px; padding: 12px 18px; cursor: pointer; min-height: 48px; }
+  .btn-nav { background: #fff; color: var(--sea); border: 3px solid var(--sea); }
+  .btn-nav:disabled { opacity: .35; cursor: default; }
+  .btn-check { background: #E07E1E; color: #fff; box-shadow: 0 3px 0 #a85a10; }
+  .pageno { font-weight: 700; min-width: 92px; text-align: center; }
+  .wrap { max-width: 1400px; margin: 0 auto; padding: 0 10px 18px; }
+  .page { position: relative; width: 100%; aspect-ratio: 11.69 / 8.27; background-size: 100% 100%; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,.12); overflow: hidden; user-select: none; }
+  .cb { position: absolute; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .cb::before { content: ""; position: absolute; inset: -40%; }
+  .cb.on { background: rgba(46,134,176,.18); }
+  .cb.on::after { content: "✔"; color: #1d5f86; font-weight: 900; font-size: var(--fs, 20px); line-height: 1; }
+  .cb.ok { background: rgba(47,158,68,.25); outline: 3px solid var(--ok); }
+  .cb.ok::after { color: var(--ok); }
+  .cb.bad { background: rgba(224,49,49,.2); outline: 3px solid var(--bad); }
+  .cb.bad::after { content: "✘"; color: var(--bad); }
+  .cb.missing { outline: 3px dashed var(--bad); }
+  .tx { position: absolute; border: 0; background: rgba(255,255,255,.55); border-radius: 6px; font-family: inherit; color: #1d5f86; font-weight: 700; padding: 0 6px; outline: none; }
+  .tx:focus { background: #fff; box-shadow: 0 0 0 3px rgba(46,134,176,.5); }
+  .result { display: none; margin: 12px auto 0; max-width: 900px; text-align: center; border-radius: 16px; padding: 14px 16px; font-size: 19px; font-weight: 700; }
+  .result.show { display: block; }
+  .result.good { background: #E6F4EA; border: 3px solid var(--ok); }
+  .result.try { background: #FFF3D6; border: 3px solid #E07E1E; }
+  .result small { display: block; font-size: 14px; font-weight: 400; margin-top: 4px; }
+  .dots { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; padding: 0 12px 6px; }
+  .dot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--sea); background: #fff; color: var(--sea); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; min-height: 0; }
+  .dot.cur { background: var(--sea); color: #fff; }
+  .dot.done { border-color: var(--ok); }
+  footer { text-align: center; font-size: 12px; color: #7A6A57; padding: 6px 12px 24px; }
+  footer a { color: #7A6A57; }
+  @media (max-width: 700px) { header .title { font-size: 14px; } button { font-size: 15px; padding: 10px 12px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="title">__EMOJI__ __TITLE__</div>
+  <div class="shells" id="shells"></div>
+</header>
+<div class="nav">
+  <button class="btn-nav" id="prev" aria-label="prev">◀ __BACK__</button>
+  <span class="pageno" id="pageno"></span>
+  <button class="btn-nav" id="next" aria-label="next">__NEXT__ ▶</button>
+  <button class="btn-check" id="check" style="display:none">✔ __CHECK__</button>
+</div>
+<div class="dots" id="dots"></div>
+<div class="wrap">
+  <div class="page" id="page"></div>
+  <div class="result" id="result"></div>
+  <div class="nav">
+    <button class="btn-nav" id="prev2" aria-label="prev">◀ __BACK__</button>
+    <button class="btn-check" id="check2" style="display:none">✔ __CHECK__</button>
+    <button class="btn-nav" id="next2" aria-label="next">__NEXT__ ▶</button>
+  </div>
+</div>
+<footer>__FOOTER__ · <a href="#" id="reset">__RESET__</a></footer>
+<script>
+const DATA = __DATA__;
+const FORM = "https://docs.google.com/forms/d/e/1FAIpQLSf8Q0eXHBOoqDjMB4RNrlT2vCchtRgfrl3rMNP-N9qK_XbWBw/formResponse";
+const ENTRY = { nome: "entry.569173553", desafio: "entry.2095890421", acertos: "entry.240185722", respostas: "entry.597932716" };
+const CFG = __CONFIG__;
+const CH = CFG.CH;
+const NPAGES = CFG.NPAGES, KEY = CFG.KEY, PER = CFG.PER, MAXC = Object.keys(CH).length * PER;
+const W = DATA.W, H = DATA.H;
+const F = DATA.fields.map((f, i) => ({ ...f, id: i }));
+
+let st = { page: 1, on: {}, text: {}, done: {}, tries: {}, queue: [] };
+try { const s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s) st = Object.assign(st, s); } catch (e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} };
+
+const $ = (id) => document.getElementById(id);
+const pageEl = $("page"), resEl = $("result");
+
+function groupsOn(p) {
+  const order = [], map = {};
+  F.filter((f) => f.p === p && f.g).forEach((f) => { if (!map[f.g]) { map[f.g] = []; order.push(f.g); } map[f.g].push(f); });
+  return order.map((g, i) => ({ g, n: i + 1, multi: g.endsWith("*"), items: map[g] }));
+}
+
+function render() {
+  const p = st.page;
+  pageEl.style.backgroundImage = `url(pages/p-${String(p).padStart(2, "0")}.jpg)`;
+  pageEl.innerHTML = "";
+  const pw = pageEl.clientWidth || 1000;
+  F.filter((f) => f.p === p).forEach((f) => {
+    const css = `left:${(f.x / W) * 100}%;top:${(f.y / H) * 100}%;width:${(f.w / W) * 100}%;height:${(f.h / H) * 100}%;`;
+    if (f.t === "cb") {
+      const d = document.createElement("div");
+      d.className = "cb" + (st.on[f.id] ? " on" : "");
+      d.style.cssText = css + `--fs:${Math.max(12, (f.h / H) * pw * 0.9 * (H / W) * (W / H))}px`;
+      d.setAttribute("role", "checkbox"); d.setAttribute("aria-checked", !!st.on[f.id]);
+      d.dataset.id = f.id;
+      d.addEventListener("click", () => toggle(f));
+      pageEl.appendChild(d);
+    } else {
+      const inp = document.createElement("input");
+      inp.className = "tx"; inp.type = "text"; inp.maxLength = 24; inp.autocomplete = "off"; inp.spellcheck = false;
+      inp.style.cssText = css + `font-size:${Math.max(13, (f.h / H) * pw * 0.62 * (W / H) / (W / H))}px`;
+      inp.value = st.text[f.id] || "";
+      inp.addEventListener("input", () => { st.text[f.id] = inp.value; save(); });
+      pageEl.appendChild(inp);
+    }
+  });
+  $("pageno").textContent = `${p} / ${NPAGES}`;
+  $("prev").disabled = p === 1; $("next").disabled = p === NPAGES;
+  $("check").style.display = $("check2").style.display = CH[p] ? "" : "none";
+  $("prev2").disabled = p === 1; $("next2").disabled = p === NPAGES;
+  resEl.className = "result"; resEl.innerHTML = "";
+  if (CH[p] && st.done[p]) showResult(p, st.done[p].score, st.done[p].total, false);
+  $("dots").innerHTML = "";
+  for (let i = 1; i <= NPAGES; i++) {
+    const b = document.createElement("button");
+    b.className = "dot" + (i === p ? " cur" : "") + (CH[i] && st.done[i] ? " done" : "");
+    b.textContent = i; b.setAttribute("aria-label", String(i));
+    b.onclick = () => go(i);
+    $("dots").appendChild(b);
+  }
+  $("shells").textContent = `${CFG.CUR} ${Object.keys(st.done).length * PER} / ${MAXC}`;
+}
+
+function toggle(f) {
+  const turnOn = !st.on[f.id];
+  if (turnOn && f.g && !f.g.endsWith("*")) F.filter((o) => o.g === f.g).forEach((o) => delete st.on[o.id]);
+  if (turnOn) st.on[f.id] = 1; else delete st.on[f.id];
+  save(); render();
+}
+
+function go(p) { st.page = Math.min(NPAGES, Math.max(1, p)); save(); render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+
+function showResult(p, score, total, fresh) {
+  const [n, name] = CH[p];
+  const perfect = score === total;
+  resEl.className = "result show " + (perfect ? "good" : "try");
+  resEl.innerHTML = perfect
+    ? CFG.MSG_OK.replace(/\{s\}/g, score).replace(/\{t\}/g, total).replace(/\{n\}/g, n)
+    : CFG.MSG_TRY.replace(/\{s\}/g, score).replace(/\{t\}/g, total).replace(/\{n\}/g, n);
+  if (fresh) resEl.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function check() {
+  const p = st.page; if (!CH[p]) return;
+  const gs = groupsOn(p);
+  let score = 0; const lines = [];
+  gs.forEach(({ g, n, items }) => {
+    const chosen = items.filter((f) => st.on[f.id]);
+    const right = items.filter((f) => f.ok);
+    const correct = chosen.length === right.length && chosen.every((f) => f.ok);
+    if (correct) score++;
+    items.forEach((f) => {
+      const el = pageEl.querySelector(`[data-id="${f.id}"]`); if (!el) return;
+      el.classList.remove("ok", "bad", "missing");
+      if (st.on[f.id]) el.classList.add(f.ok ? "ok" : "bad");
+    });
+    if (!chosen.length) items.forEach((f) => { const el = pageEl.querySelector(`[data-id="${f.id}"]`); if (el) el.classList.add("missing"); });
+    lines.push(`${n}: ${chosen.map((f) => f.label).join(" + ") || "(em branco)"} ${correct ? "✔" : "✘"}`);
+  });
+  const extra = F.filter((f) => f.p === p && f.t === "tx").map((f) => (st.text[f.id] || "").trim()).filter(Boolean);
+  if (extra.length) lines.push(`frase: ${extra.join(" / ")}`);
+  const total = gs.length;
+  st.tries[p] = (st.tries[p] || 0) + 1;
+  st.done[p] = { score, total };
+  const stopBox = F.find((f) => f.p === 2 && f.stop === CH[p][0]); if (stopBox) st.on[stopBox.id] = 1;
+  save();
+  $("shells").textContent = `${CFG.CUR} ${Object.keys(st.done).length * PER} / ${MAXC}`;
+  showResult(p, score, total, true);
+  const nameField = F.find((f) => f.p === 1 && f.t === "tx");
+  send({ nome: (st.text[nameField.id] || "Isabel").trim() || "Isabel", desafio: `${CFG.PREFIX} · ${CFG.CHWORD} ${CH[p][0]} · ${CH[p][1]} (página ${p})`,
+    acertos: `${score}/${total} (tentativa ${st.tries[p]})`, respostas: lines.join(" | ") });
+}
+
+function send(rec) { st.queue.push(rec); save(); flush(); }
+async function flush() {
+  while (st.queue.length) {
+    const rec = st.queue[0];
+    const body = new URLSearchParams();
+    Object.keys(ENTRY).forEach((k) => body.append(ENTRY[k], rec[k] || ""));
+    try { await fetch(FORM, { method: "POST", mode: "no-cors", body }); st.queue.shift(); save(); }
+    catch (e) { break; }
+  }
+}
+
+$("prev").onclick = () => go(st.page - 1);
+$("next").onclick = () => go(st.page + 1);
+$("check").onclick = check;
+$("prev2").onclick = () => go(st.page - 1);
+$("next2").onclick = () => go(st.page + 1);
+$("check2").onclick = check;
+$("reset").onclick = (e) => { e.preventDefault(); if (confirm(CFG.CONFIRM)) { const q = st.queue; st = { page: 1, on: {}, text: {}, done: {}, tries: {}, queue: q }; save(); render(); } };
+document.addEventListener("keydown", (e) => { if (e.target.tagName === "INPUT") return; if (e.key === "ArrowRight") go(st.page + 1); if (e.key === "ArrowLeft") go(st.page - 1); });
+let sx = null;
+pageEl.addEventListener("touchstart", (e) => { sx = e.touches[0].clientX; }, { passive: true });
+pageEl.addEventListener("touchend", (e) => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 70) go(st.page + (dx < 0 ? 1 : -1)); sx = null; });
+window.addEventListener("resize", render);
+window.addEventListener("online", flush);
+for (let i = 1; i <= NPAGES; i++) { const im = new Image(); im.src = `pages/p-${String(i).padStart(2, "0")}.jpg`; }
+render(); flush();
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{"html": {"LANG": "en", "TITLE": "Legend Masters", "FAVICON": "%E2%9A%94%EF%B8%8F", "COLOR": "#5B3FA0", "EMOJI": "⚔️",
+  "BACK": "Back", "NEXT": "Next", "CHECK": "Check my answers",
+  "FOOTER": "Tap the boxes to answer. Your answers are saved on this device and sent to Dad", "RESET": "start over"},
+ "js": {"CH": {"4": [1, "Master Aria and Partiko"], "6": [2, "Master Theo and Numerra"], "8": [3, "Master Lia and Ribbonix"], "10": [4, "Master Rubi and Gemmora"], "12": [5, "Master Dias and Calendrix"], "14": [6, "Master Neve and Thermion"], "17": [7, "Master Cofre and Moedon"]},
+  "NPAGES": 18, "KEY": "legend-masters-v1", "PER": 10, "CUR": "💎", "PREFIX": "Math V1", "CHWORD": "Duel",
+  "MSG_OK": "🎉 {s} / {t}! Duel {n} won: +10 crystals and a new legendary on your team!<small>Tell Dad one thing you learned on this page.</small>",
+  "MSG_TRY": "⭐ {s} / {t}. Great effort! Look at the red boxes, read the mission page again and try once more.<small>You still get your badge for Duel {n}. Every try helps your brain grow!</small>",
+  "CONFIRM": "Start over and clear all answers on this device?"}}
